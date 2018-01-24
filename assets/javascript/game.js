@@ -8,7 +8,7 @@ class Character {
 	}
 
 	attack() {
-		console.log("Your character has attacked the opponent!");
+		console.log(this.name + " has attacked the opponent!");
 	}
 }
 
@@ -18,48 +18,66 @@ var pikachu = new Character("Pikachu", 35, 55, 8, "assets/images/pikachu.jpg");
 var bulbasaur = new Character("Bulbasaur", 45, 49, 9, "assets/images/bulbasaur.jpg");
 var array = [squirtle, charmander, pikachu, bulbasaur];
 var divToAppend = '';
+var spotsFilled = false;
+var myChar;
+var enemy;
+// var arrayOfDivs = [];
 
 function mainGame(){
 
 	generateCharacters();
 
-	$(".char-image").on("click", function() {
+  	$("#chars #pokemon").on("click", function() {
+      // console.log(arrayOfDivs);
+      // Inside the on-click event...
 
-    // Inside the on-click event...
-
-    if ($("#yourChar").is(':empty')) {
-      console.log("in 'if'");
-      $("#charText").text("");
-
-      // For each iteration, this will create a new image
-      // divToAppend = '<div class="col-lg-3"> <div class="card"> <center><img class="card-img-top char-image" src="'+$(this)["image"]+'" alt="Card image cap"></center> <div class="card-body"> <h5 class="card-title">'+array[i]["name"]+'</h5> <p class="card-text"><small class="text-muted">'+array[i]["hp"]+'</small></p> </div> </div> </div>'
-
-      $("#yourChar").append(divToAppend);
-  
-      $(this).addClass("hidden");
-    }
-
-    else {
-      while ($("#enemy").is(':empty')) {
-      console.log("in 'else'");
-      $("#enemyText").text("");
-      var enemy = $("<img>");
-
-      enemy.addClass("char-image");
-
-      enemy.attr('src', $(this).attr("src"));
-
-      $("#enemy").append(enemy);
-      $(this).addClass("hidden");
+      if ($("#yourChar").is(':empty')) {
+        console.log("in 'if'");
+        $("#charText").text("");
+        myChar = this;
+        console.log(myChar);
+        $("#yourChar").append(this);
       }
-    }
-	});
 
-	
+      else {
+        while ($("#enemy").is(':empty')) {
+        console.log("in 'else'");
+        $("#enemyText").text("");
+        
+
+        $("#enemy").append(this);
+        enemy = this;
+        spotsFilled = true;
+        $("button").removeClass("hidden");
+        }
+      }
+  	});
+
+    $("button").on("click", function() {
+      
+      if ($("#yourChar div").hasClass('Squirtle')) {
+        squirtle.attack();
+        fight();
+      }
+      else if ($("#yourChar div").hasClass('Charmander')) {
+        charmander.attack();
+      }
+      else if ($("#yourChar div").hasClass('Pikachu')) {
+        pikachu.attack();
+      }
+      else if ($("#yourChar div").hasClass('Bulbasaur')) {
+        bulbasaur.attack();
+      }
+    });
+
 }
 
 function reset(){
 
+}
+
+function fight() {
+  console.log($("#enemy").hp);
 }
 
 function generateCharacters() {
@@ -83,7 +101,9 @@ function imgsGenerator() {
   for (var i = 0; i < array.length; i++) {
 
     // For each iteration, this will create a new image
-    divToAppend = '<div class="col-lg-3"> <div class="card"> <center><img class="card-img-top char-image" src="'+array[i]["image"]+'" alt="Card image cap"></center> <div class="card-body"> <h5 class="card-title">'+array[i]["name"]+'</h5> <p class="card-text"><small class="text-muted">'+array[i]["hp"]+'</small></p> </div> </div> </div>'
+    divToAppend = '<div class="col '+array[i]["name"]+'" id="pokemon"> <div class="card"> <center><img class="card-img-top char-image" src="'+array[i]["image"]+'" alt="Pokemon image"></center> <div class="card-body"> <h5 class="card-title">'+array[i]["name"]+'</h5> <p class="card-text">'+array[i]["hp"]+'</p> </div> </div> </div>'
+
+    // arrayOfDivs.push(divToAppend);
 
     $("#chars").append(divToAppend);
   }
